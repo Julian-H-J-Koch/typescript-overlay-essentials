@@ -18,7 +18,7 @@ export interface InfoOverlayWithInputState {
 }
 
 // Um das InfoOverlayWithInput zu nutzen, muss der State die folgende Struktur haben:
-export const defaultInformationState : InfoOverlayWithInputState = {
+export const defaultInfoOverlayWithInputState : InfoOverlayWithInputState = {
     headline: undefined,
     message: undefined,
     preInput: undefined,
@@ -87,7 +87,7 @@ export function InfoOverlayWithInput({ state, setState }: { state: InfoOverlayWi
             handler: handler,
             handlerArgs: state.handlerArgs
         };
-        setState(defaultInformationState);
+        setState(defaultInfoOverlayWithInputState);
         if (typeof tempState.handler === 'function' && useInput)
             (tempState.handler as ((userInput: string, args?: unknown) => void))(input, tempState.handlerArgs);
         else if (typeof tempState.handler === 'function')
