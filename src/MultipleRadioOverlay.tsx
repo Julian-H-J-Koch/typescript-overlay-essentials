@@ -1,16 +1,17 @@
 import { useEffect, useState, CSSProperties } from 'react';
-import './MultipleChoiceOverlay.css';
+import * as React from 'react';
+import './MultipleRadioOverlay.css';
 
 
-// Um das MultipleChoiceOverlay zu nutzen, muss der State die folgende Struktur haben:
-export interface MultipleChoiceOverlayState {
+// Um das MultipleRadioOverlay zu nutzen, muss der State die folgende Struktur haben:
+export interface MultipleRadioOverlayState {
     headline?: string | undefined;
     message?: string | undefined;
     choices: string[] | [];
-    preInput?: string[] | undefined;
+    preInput?: string | undefined;
     cancelButtonText?: string | undefined;
     proceedButtonText?: string | undefined;
-    handlerOk?: ((userInput: string[], args?: unknown) => void) | undefined;
+    handlerOk?: ((userInput: string, args?: unknown) => void) | undefined;
     handlerCancel?: ((args?: unknown) => void) | undefined;
     handlerArgs?: unknown;
     addCloseButton?: boolean | undefined;
@@ -18,8 +19,8 @@ export interface MultipleChoiceOverlayState {
     cancelButtonStyle?: CSSProperties | undefined;
 }
 
-// Der standard MultipleChoiceOverlay Status, der zur Initialisierung genutzt werden kann
-export const defaultMultipleChoiceState: MultipleChoiceOverlayState = {
+// Um das MultipleRadioOverlay zu nutzen, muss der State die folgende Struktur haben:
+export const defaultMultipleRadioState: MultipleRadioOverlayState = {
     headline: undefined,
     message: undefined,
     choices: [],
@@ -33,12 +34,11 @@ export const defaultMultipleChoiceState: MultipleChoiceOverlayState = {
     proceedButtonStyle: undefined,
     cancelButtonStyle: undefined,
 };
-
 // Wobei alle Attribute grundsätzlich optional sind:
 // - headline: ist die Überschrift und wird fett hinterlegt
 // - message: ist die angezeigte Nachricht
 // - choices: Ein String-Array mit den Optionen die ausgewählt werden können (ohne Angabe gibt es keine Auswahl)
-// - preInput: Ein String-Array: Die Einträge sind stadardmäßig ausgewählt alle anderen nicht ausgewählt
+// - preInput: Ein String: Dieser Eintrag ist stadardmäßig ausgewählt
 // - cancelButtonText: ist der Text der auf dem Cancel Button stehen soll (ohne Angabe wird "Abbrechen" verwendet)
 // - proceedButtonText: ist der Text der auf dem Proceed Button stehen soll (ohne Angabe wird "OK" verwendet)
 // - handlerOk: ist die Funktion die bei Bestätigung des Inputs ausgeführt wird (Struktur: handlerOk(userInput, handlerArgs)
@@ -50,37 +50,26 @@ export const defaultMultipleChoiceState: MultipleChoiceOverlayState = {
 
 // Output: Der Input vom User wird am Ende an den handlerOk übergeben (oder bei handlerCancel ignoriert)!
 // Somit wird der handler so aufgerufen: handlerOk(UserInput, handlerArgs) oder handlerCancel(handlerArgs)
-export function MultipleChoiceOverlay({ state, setState }: { state: MultipleChoiceOverlayState, setState: (state: MultipleChoiceOverlayState) => void }): React.ReactElement {
+export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadioOverlayState, setState: (state: MultipleRadioOverlayState) => void }): React.ReactElement {
 
     // Wird verwendet um das Infoverlay ein- und auszublenden
-    const [showOverlay, setShowOverlay] = useState(false);
+    const [showOverlay, setShowOverlay] = useState<boolean>(false);
 
-    // Wird verwendet um die ausgewählten Choices aktuell zu halten
-    const [input, setInput] = useState<string[]>([]);
+    // Wird verwendet um die ausgewählte Wahl aktuell zu halten
+    const [input, setInput] = useState<string>("");
 
     // Sobald der State von außen aktualisiert wird triggert diese Funktion
     // Die setzt showOverlay auf true
     useEffect(() => {
         if (state?.message != null || state?.headline != null) {
-            setInput(state?.preInput != null ? state.preInput : []);
+            setInput(state?.preInput != null ? state.preInput : "");
             setShowOverlay(true);
             setTimeout(() => { document.getElementById("confirmButton")?.focus(); }, 1);
         }
     }, [state]);
 
-    // Toggled die Auswahl eines Choices
-    // Setzt dafür den aktuellen Input auf den neuen Input + Choice
-    const toggle = (choice : string) : void => {
-        if (input.includes(choice)) {
-            setInput(input.filter(item => item !== choice)); // Entfernt den Choice wenn er schon ausgewählt ist
-        }
-        else {
-            setInput([...input, choice]); // Fügt den Choice hinzu wenn er noch nicht ausgewählt ist
-        }
-    }
-
     const handleAction = (
-        handler: ((args?: unknown) => void) | ((userInput: string[], args?: unknown) => void) | undefined,
+        handler: ((args?: unknown) => void) | ((userInput: string, args?: unknown) => void) | undefined,
         useInput: boolean
     ): void => {
         setShowOverlay(false);
@@ -88,16 +77,16 @@ export function MultipleChoiceOverlay({ state, setState }: { state: MultipleChoi
             handler: handler,
             handlerArgs: state.handlerArgs
         };
-        setState(defaultMultipleChoiceState);
+        setState(defaultMultipleRadioState);
         if (typeof tempState.handler === 'function' && useInput)
-            (tempState.handler as ((userInput: string[], args?: unknown) => void))(input, tempState.handlerArgs);
+            (tempState.handler as ((userInput: string, args?: unknown) => void))(input, tempState.handlerArgs);
         else if (typeof tempState.handler === 'function')
             (tempState.handler as ((args?: unknown) => void))(tempState.handlerArgs);
     }
 
     return showOverlay ?
-        <div className="multiplechoice-overlay">
-            <div className="multiplechoice-box">
+        <div className="multipleradio-overlay">
+            <div className="multipleradio-box">
                 {state.addCloseButton?
                     <span className="closeButton">
                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -117,21 +106,21 @@ export function MultipleChoiceOverlay({ state, setState }: { state: MultipleChoi
                         </svg>
                     </span> : 
                 <></>}
-                <p className="headline" id="theHeadline" tabIndex={0} style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}><strong>{state?.headline != null ? state.headline : ""}</strong></p>
+                <p className="headline" id = "theHeadline" tabIndex={0} style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}><strong>{state?.headline != null ? state.headline : ""}</strong></p>
                 <p tabIndex={0} style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}>{state?.message != null ? state.message : ""}</p>
-                <div className="choices-input">
-                    <div className="choices-container">
+                <div className="radios-input">
+                    <div className="radios-container">
                         {state?.choices.map(choice => (
-                            <label className="choice-label" key={choice}>
+                            <label className="radio-label" key={choice}>
                                 <input
-                                    type="checkbox"
-                                    checked={input.includes(choice)}
-                                    onChange={() => toggle(choice)}
+                                    type="radio"
+                                    checked={input === choice}
+                                    onChange={() => setInput(choice)}
                                     tabIndex={0}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter' || e.key === ' ') {
                                             e.preventDefault(); // Verhindert Scroll bei Space
-                                            toggle(choice);
+                                            setInput(choice);
                                         }
                                     }}
                                 />

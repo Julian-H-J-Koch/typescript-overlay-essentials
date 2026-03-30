@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import * as React from 'react';
-import Select, { SingleValue, MultiValue}  from 'react-select'
+import Select from 'react-select';
+import { MultiValue, SingleValue } from 'react-select';
 import type { CSSObject } from '@emotion/react';
 import './Dropdown.css';
 

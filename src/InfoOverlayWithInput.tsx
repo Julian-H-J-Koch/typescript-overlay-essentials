@@ -1,4 +1,5 @@
 import { useEffect, useState, CSSProperties } from 'react';
+import * as React from 'react';
 import './InfoOverlayWithInput.css';
 
 // Um das InfoOverlayWithInput zu nutzen, muss der State die folgende Struktur haben:

@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef, CSSProperties } from 'react';
 import * as React from 'react';
+import { useEffect, useState, useRef, CSSProperties } from 'react';
 import './ConfirmationBox.css';
 
 // Um die ConfirmationBox zu nutzen, muss der State die folgende Struktur haben:

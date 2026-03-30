@@ -33,4 +33,4 @@ export function setInputFilter(textbox: HTMLElement | undefined, inputFilter: (v
             });
         }
     });
-    }
+}

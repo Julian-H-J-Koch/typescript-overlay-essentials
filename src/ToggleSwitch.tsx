@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import "./ToggleSwitch.css";
 
 export interface ToggleSwitchOption<T> {
@@ -15,8 +15,8 @@ export interface ToggleSwitchOption<T> {
 
 export function ToggleSwitch<T>({ optionLeft, optionRight, value, onChange } : { optionLeft: ToggleSwitchOption<T>, optionRight: ToggleSwitchOption<T>, value: T, onChange: (value: T) => void }) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const optionLeftRef = useRef<HTMLDivElement>(null);
-    const optionRightRef = useRef<HTMLDivElement>(null);
+    const optionLeftRef = useRef<HTMLDivElement | null>(null);
+    const optionRightRef = useRef<HTMLDivElement | null>(null);
     const [sliderStyle, setSliderStyle] = useState({});
 
     useEffect(() => {
