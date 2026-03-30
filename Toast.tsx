@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import * as React from 'react';
+import { useEffect, useState, ReactElement } from 'react';
 import './Toast.css'
 
 // Zeigt einen kleinen Toast in der oberen rechten Ecke an, der nach 2,5 Sekunden wieder verschwindet
-function Toast({ state, setState }: { state: string, setState: (value: string) => void }) : React.ReactElement {
+export function Toast({ state, setState }: { state: string, setState: (value: string) => void }) : ReactElement {
     // Wird verwendet um die Toast-Notification ein-/auszublenden
     const [showToast, setShowToast] = useState(false);
     // Wird verwendet um den Inhalt der Toast-Notification zu bestimmen
@@ -30,5 +29,3 @@ function Toast({ state, setState }: { state: string, setState: (value: string) =
             </div>)}
     </>
 }
-
-export default Toast;

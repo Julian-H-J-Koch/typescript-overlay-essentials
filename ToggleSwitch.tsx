@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./ToggleSwitch.css";
 
-export interface Option<T> {
+export interface ToggleSwitchOption<T> {
     value: T;
     label: string;
 }
@@ -13,7 +13,7 @@ export interface Option<T> {
 // - onChange: Die Funktion die bei Änderung ausgeführt werden soll.
 //             Standardmäßig könnte z.B. {(value) => {value === valueLeft ? setValue(valueLeft) : setValue(valueRight)}} genutzt werden
 
-export function ToggleSwitch<T>({ optionLeft, optionRight, value, onChange } : { optionLeft: Option<T>, optionRight: Option<T>, value: T, onChange: (value: T) => void }) {
+export function ToggleSwitch<T>({ optionLeft, optionRight, value, onChange } : { optionLeft: ToggleSwitchOption<T>, optionRight: ToggleSwitchOption<T>, value: T, onChange: (value: T) => void }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const optionLeftRef = useRef<HTMLDivElement>(null);
     const optionRightRef = useRef<HTMLDivElement>(null);

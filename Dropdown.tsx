@@ -5,7 +5,7 @@ import type { CSSObject } from '@emotion/react';
 import './Dropdown.css';
 
 // Um das Dropdown Menü zu nutzen, müssen die Optionen das folgende Interface nutzen:
-export interface Option<T = string> {
+export interface DropdownOption<T = string> {
   value: T;
   label: string;
   disabled?: boolean;
@@ -37,14 +37,14 @@ export interface Option<T = string> {
 
 export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeight, menuPlacement, width, placeHolder, defaultValue, isMulti = false, cardColorVariant = false, ignoreDarkMode = false, ...rest} :
     {
-        selections: Option<T>[],
+        selections: DropdownOption<T>[],
         value: T | T[],
         onChange: (value: T | T[] | undefined) => void,
         maxMenuHeight?: number,
         menuPlacement?: "top" | "bottom",
         width?: React.CSSProperties["width"],
         placeHolder?: string,
-        defaultValue?: Option<T> | Option<T>[],
+        defaultValue?: DropdownOption<T> | DropdownOption<T>[],
         isMulti?: boolean,
         cardColorVariant?: boolean,
         ignoreDarkMode?: boolean,
@@ -55,7 +55,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
         const options = selections.map(({value, label, disabled, indent}) => ({value: value, label: label, isDisabled: disabled ?? false, indent}));
 
         if(!initializedRef.current && Array.isArray(value) && value.length === 0 && Array.isArray(defaultValue) && defaultValue.length > 0) {
-            value = options.filter(opt => (defaultValue as Option<T>[]).map(({value}) => (value)).includes(opt.value)).map(opt => opt.value);
+            value = options.filter(opt => (defaultValue as DropdownOption<T>[]).map(({value}) => (value)).includes(opt.value)).map(opt => opt.value);
         } 
 
         function usePrefersDarkMode() : boolean {
@@ -84,7 +84,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
         }
 
         return isMulti || Array.isArray(defaultValue) ? (
-            <Select<Option<T>, true>
+            <Select<DropdownOption<T>, true>
                 className = "custom-select" 
                 isMulti={true}
                 placeholder = {placeHolder ?? ""}
@@ -93,12 +93,12 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
                                 options.filter(opt => (hasId(opt.value) && (value as T[]).find(val => hasId(val) && hasId(opt.value) && val.id ===  opt.value.id))) // Dann alle Optionen, die in den values per id vorkommen
                                 : options.filter(opt => ((value as T[]).includes(opt.value))) // Ansonsten einfach alle Optionen, die in den values vorkommen
                       }
-                onChange={(selectedOption: MultiValue<Option<T>>) => {initializedRef.current = true; onChange(selectedOption.map((opt: Option<T>) => opt.value))}}
+                onChange={(selectedOption: MultiValue<DropdownOption<T>>) => {initializedRef.current = true; onChange(selectedOption.map((opt: DropdownOption<T>) => opt.value))}}
                 maxMenuHeight={maxMenuHeight ?? 280}
                 menuPlacement={menuPlacement ?? "auto"}
                 menuPosition="fixed"
                 classNamePrefix="dropdown"
-                defaultValue={options.filter(opt => (defaultValue as Option<T>[]).map(({value}) => (value)).includes(opt.value))}
+                defaultValue={options.filter(opt => (defaultValue as DropdownOption<T>[]).map(({value}) => (value)).includes(opt.value))}
                 formatOptionLabel={({ label, indent }: { label: string; indent?: number },{ context } : { context: string }) => {
                     if (context === 'menu') {
                         // Alle mit indent angegebenen Werte im Dropdown-Menü einrücken
@@ -146,7 +146,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
                 {...rest}
             />
         ) : (
-        <Select<Option<T>, false>
+        <Select<DropdownOption<T>, false>
                 className = "custom-select" 
                 isMulti={false}
                 placeholder = {placeHolder ?? ""}
@@ -155,7 +155,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
                             options.find(opt => hasId(opt.value) && hasId(value) && opt.value.id === value.id) // Die eine Option mit der passenden id finden
                             : options.find(opt => opt.value === value)} // Ohne Multi oder id nur die eine Option finden
 
-                onChange={(selectedOption: SingleValue<Option<T>>) => onChange(selectedOption?.value ?? undefined)}
+                onChange={(selectedOption: SingleValue<DropdownOption<T>>) => onChange(selectedOption?.value ?? undefined)}
                 maxMenuHeight={maxMenuHeight ?? 280}
                 menuPlacement={menuPlacement ?? "auto"}
                 menuPosition="fixed"
