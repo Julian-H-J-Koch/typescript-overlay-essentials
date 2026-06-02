@@ -4,13 +4,13 @@ import './InfoOverlay.css';
 
 // Um das OnfoOverlay zu nutzen, muss der State die folgende Struktur haben:
 export interface InfoOverlayState {
-    headline?: string | undefined;
-    message?: string | undefined;
-    proceedButtonText?: string | undefined;
-    handler?: ((args?: unknown) => void) | undefined;
+    headline?: React.ReactNode;
+    message?: React.ReactNode;
+    proceedButtonText?: React.ReactNode;
+    handler?: ((args?: unknown) => void);
     handlerArgs?: unknown;
-    addCloseButton?: boolean | undefined;
-    style?: CSSProperties | undefined;
+    addCloseButton?: boolean;
+    style?: CSSProperties;
 }
 
 // Der standard InfoOverlay Status, der zur Initialisierung genutzt werden kann

@@ -4,19 +4,19 @@ import './ConfirmationBox.css';
 
 // Um die ConfirmationBox zu nutzen, muss der State die folgende Struktur haben:
 export interface ConfirmationBoxState {
-    headline?: string | undefined;
-    message?: string | undefined;
-    message1?: string | undefined;
-    message2?: string | undefined;
-    cancelButtonText?: string | undefined;
-    proceedButtonText?: string | undefined;
-    handlerOk?: ((args?: unknown) => void) | undefined;
-    handlerCancel?: ((args?: unknown) => void) | undefined;
+    headline?: React.ReactNode;
+    message?: React.ReactNode;
+    message1?: React.ReactNode;
+    message2?: React.ReactNode;
+    cancelButtonText?: React.ReactNode;
+    proceedButtonText?: React.ReactNode;
+    handlerOk?: ((args?: unknown) => void);
+    handlerCancel?: ((args?: unknown) => void);
     handlerArgs?: unknown;
-    addCloseButton?: boolean | undefined;
-    activateConfirm?: boolean | undefined;
-    proceedButtonStyle?: CSSProperties | undefined;
-    cancelButtonStyle?: CSSProperties | undefined;
+    addCloseButton?: boolean;
+    activateConfirm?: boolean;
+    proceedButtonStyle?: CSSProperties;
+    cancelButtonStyle?: CSSProperties;
 }
 
 // Der standard ComfirmationBox Status, der zur Initialisierung genutzt werden kann

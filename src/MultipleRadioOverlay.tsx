@@ -5,18 +5,18 @@ import './MultipleRadioOverlay.css';
 
 // Um das MultipleRadioOverlay zu nutzen, muss der State die folgende Struktur haben:
 export interface MultipleRadioOverlayState {
-    headline?: string | undefined;
-    message?: string | undefined;
+    headline?: React.ReactNode;
+    message?: React.ReactNode;
     choices: string[] | [];
-    preInput?: string | undefined;
-    cancelButtonText?: string | undefined;
-    proceedButtonText?: string | undefined;
-    handlerOk?: ((userInput: string, args?: unknown) => void) | undefined;
-    handlerCancel?: ((args?: unknown) => void) | undefined;
+    preInput?: string;
+    cancelButtonText?: React.ReactNode;
+    proceedButtonText?: React.ReactNode;
+    handlerOk?: ((userInput: string, args?: unknown) => void);
+    handlerCancel?: ((args?: unknown) => void);
     handlerArgs?: unknown;
-    addCloseButton?: boolean | undefined;
-    proceedButtonStyle?: CSSProperties | undefined;
-    cancelButtonStyle?: CSSProperties | undefined;
+    addCloseButton?: boolean;
+    proceedButtonStyle?: CSSProperties;
+    cancelButtonStyle?: CSSProperties;
 }
 
 // Um das MultipleRadioOverlay zu nutzen, muss der State die folgende Struktur haben:

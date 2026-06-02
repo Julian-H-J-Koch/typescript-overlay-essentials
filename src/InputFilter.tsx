@@ -1,5 +1,5 @@
 // Restricts input for the given textbox to the given inputFilter function.
-export function setInputFilter(textbox: HTMLElement | undefined, inputFilter: (value: string) => boolean, errMsg: string) : void {
+export function setInputFilter(inputFilter: (value: string) => boolean, errMsg: string, textbox?: HTMLElement) : void {
     [ "input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout" ].forEach(function(event) {
         if(textbox) {
             textbox.addEventListener(event, function(e: Event) {

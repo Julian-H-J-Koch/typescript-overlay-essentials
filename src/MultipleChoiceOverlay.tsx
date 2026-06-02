@@ -5,18 +5,18 @@ import './MultipleChoiceOverlay.css';
 
 // Um das MultipleChoiceOverlay zu nutzen, muss der State die folgende Struktur haben:
 export interface MultipleChoiceOverlayState {
-    headline?: string | undefined;
-    message?: string | undefined;
+    headline?: React.ReactNode;
+    message?: React.ReactNode;
     choices: string[] | [];
-    preInput?: string[] | undefined;
-    cancelButtonText?: string | undefined;
-    proceedButtonText?: string | undefined;
-    handlerOk?: ((userInput: string[], args?: unknown) => void) | undefined;
-    handlerCancel?: ((args?: unknown) => void) | undefined;
+    preInput?: string[];
+    cancelButtonText?: React.ReactNode;
+    proceedButtonText?: React.ReactNode;
+    handlerOk?: ((userInput: string[], args?: unknown) => void);
+    handlerCancel?: ((args?: unknown) => void);
     handlerArgs?: unknown;
-    addCloseButton?: boolean | undefined;
-    proceedButtonStyle?: CSSProperties | undefined;
-    cancelButtonStyle?: CSSProperties | undefined;
+    addCloseButton?: boolean;
+    proceedButtonStyle?: CSSProperties;
+    cancelButtonStyle?: CSSProperties;
 }
 
 // Der standard MultipleChoiceOverlay Status, der zur Initialisierung genutzt werden kann

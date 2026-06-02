@@ -5,9 +5,9 @@ import './LoadingOverlay.css';
 // Um das LoadingOverlay zu nutzen, muss der State die folgende Struktur haben:
 export interface LoadingOverlayState {
     isActive?: boolean;
-    message?: string | undefined;
-    color?: string | undefined;
-    showSuccess?: boolean | undefined;
+    message?: React.ReactNode;
+    color?: string;
+    showSuccess?: boolean;
 }
 
 // Der standard LoadingOverlay Status, der zur Initialisierung genutzt werden kann
