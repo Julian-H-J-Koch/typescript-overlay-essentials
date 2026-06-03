@@ -8,6 +8,7 @@ export interface MultipleRadioOverlayState {
     headline?: React.ReactNode;
     message?: React.ReactNode;
     choices: string[] | [];
+    disabledChoices?: string[],
     preInput?: string;
     cancelButtonText?: React.ReactNode;
     proceedButtonText?: React.ReactNode;
@@ -24,6 +25,7 @@ export const defaultMultipleRadioState: MultipleRadioOverlayState = {
     headline: undefined,
     message: undefined,
     choices: [],
+    disabledChoices: undefined,
     preInput: undefined,
     cancelButtonText: undefined,
     proceedButtonText: undefined,
@@ -38,6 +40,7 @@ export const defaultMultipleRadioState: MultipleRadioOverlayState = {
 // - headline: ist die Überschrift und wird fett hinterlegt
 // - message: ist die angezeigte Nachricht
 // - choices: Ein String-Array mit den Optionen die ausgewählt werden können (ohne Angabe gibt es keine Auswahl)
+// - disabledChoices: Ein String-Array mit den Optionen, die zwar vorhanden sind, aber nicht ausgewählt werden können (Einträge müssen identisch zu denen in choices sein und werden onst ignoriert)
 // - preInput: Ein String: Dieser Eintrag ist stadardmäßig ausgewählt
 // - cancelButtonText: ist der Text der auf dem Cancel Button stehen soll (ohne Angabe wird "Abbrechen" verwendet)
 // - proceedButtonText: ist der Text der auf dem Proceed Button stehen soll (ohne Angabe wird "OK" verwendet)
@@ -115,6 +118,7 @@ export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadio
                                 <input
                                     type="radio"
                                     checked={input === choice}
+                                    disabled={state.disabledChoices?.includes(choice)}
                                     onChange={() => setInput(choice)}
                                     tabIndex={0}
                                     onKeyDown={(e) => {

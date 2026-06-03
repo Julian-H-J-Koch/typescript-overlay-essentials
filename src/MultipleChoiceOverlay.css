@@ -89,6 +89,12 @@
             border-color: var(--HSDAkzent, #4aabf5) ;
         }
 
+        .multiplechoice-box .choices-input input[type="checkbox"]:disabled {
+            background-color: var(--Mittelgrau, #ddd); 
+            border-color: var(--Dunkelgrau, #999);
+            cursor: auto;
+        }
+
 
         /* Häkchen aus zwei Linien */
         .multiplechoice-box .choices-input input[type="checkbox"]:checked::after {
@@ -156,6 +162,12 @@
             .multiplechoice-box .choices-input input[type="checkbox"]:checked::after {
                 border-color: white;
             }
+
+    .multiplechoice-box .choices-input input[type="checkbox"]:disabled {
+        background-color: var(--Dunkelgrau, #999); 
+        border-color: var(--Mittelgrau, #ddd);
+        cursor: auto;
+    }
 }
 
 .multiplechoice-box .closeButton {

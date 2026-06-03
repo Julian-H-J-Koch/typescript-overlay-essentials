@@ -8,6 +8,7 @@ export interface MultipleChoiceOverlayState {
     headline?: React.ReactNode;
     message?: React.ReactNode;
     choices: string[] | [];
+    disabledChoices?: string[],
     preInput?: string[];
     cancelButtonText?: React.ReactNode;
     proceedButtonText?: React.ReactNode;
@@ -24,6 +25,7 @@ export const defaultMultipleChoiceState: MultipleChoiceOverlayState = {
     headline: undefined,
     message: undefined,
     choices: [],
+    disabledChoices: undefined,
     preInput: undefined,
     cancelButtonText: undefined,
     proceedButtonText: undefined,
@@ -39,6 +41,7 @@ export const defaultMultipleChoiceState: MultipleChoiceOverlayState = {
 // - headline: ist die Überschrift und wird fett hinterlegt
 // - message: ist die angezeigte Nachricht
 // - choices: Ein String-Array mit den Optionen die ausgewählt werden können (ohne Angabe gibt es keine Auswahl)
+// - disabledChoices: Ein String-Array mit den Optionen, die zwar vorhanden sind, aber nicht ausgewählt werden können (Einträge müssen identisch zu denen in choices sein und werden onst ignoriert)
 // - preInput: Ein String-Array: Die Einträge sind stadardmäßig ausgewählt alle anderen nicht ausgewählt
 // - cancelButtonText: ist der Text der auf dem Cancel Button stehen soll (ohne Angabe wird "Abbrechen" verwendet)
 // - proceedButtonText: ist der Text der auf dem Proceed Button stehen soll (ohne Angabe wird "OK" verwendet)
@@ -127,6 +130,7 @@ export function MultipleChoiceOverlay({ state, setState }: { state: MultipleChoi
                                 <input
                                     type="checkbox"
                                     checked={input.includes(choice)}
+                                    disabled={state.disabledChoices?.includes(choice)}
                                     onChange={() => toggle(choice)}
                                     tabIndex={0}
                                     onKeyDown={(e) => {
