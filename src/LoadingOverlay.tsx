@@ -50,7 +50,7 @@ export function LoadingOverlay({ state, setState }: { state: LoadingOverlayState
                         "--error-bg": state.color ?? "#e60028",
                     } as React.CSSProperties }
                 />
-                {state.message && <p className="loading-message">{state.message}</p>}
+                {state.message && <div className="loading-message">{state.message}</div>}
             </div>
         </div>
     ) : <></>;
