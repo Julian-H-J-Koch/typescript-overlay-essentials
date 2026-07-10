@@ -1,4 +1,4 @@
-import { useEffect, useState, ReactElement } from 'react';
+import { useEffect, useState, ReactElement, CSSProperties } from 'react';
 import * as React from 'react';
 import './LoadingOverlay.css';
 
@@ -8,6 +8,7 @@ export interface LoadingOverlayState {
     message?: React.ReactNode;
     color?: string;
     showSuccess?: boolean;
+    style?: CSSProperties;
 }
 
 // Der standard LoadingOverlay Status, der zur Initialisierung genutzt werden kann
@@ -16,6 +17,7 @@ export const defaultLoadingOverlayState: LoadingOverlayState = {
     message: undefined,
     color: undefined,
     showSuccess: undefined,
+    style: undefined,
 };
 
 // Wobei alle Attribute grundsätzlich optional sind:
@@ -23,6 +25,7 @@ export const defaultLoadingOverlayState: LoadingOverlayState = {
 // - message: ist die angezeigte Nachricht
 // - color: ist dir Farbe des Loading icons (ohne Angabe HSD rot)
 // - showSuccess: zeigt bei "true" ein grünes Häkchen an und bei "false" ein rot hinterlegtes X. Bei "undefined" wird die normale Ladeanimation gezeigt.
+// - style: ist der Style des LoadingOverlays (Standardmäßig unverändert)
 
 export function LoadingOverlay({ state, setState }: { state: LoadingOverlayState, setState: (state: LoadingOverlayState) => void }): ReactElement {
     // Wird verwendet um das LoadingOverlay ein- und auszublenden
@@ -42,7 +45,7 @@ export function LoadingOverlay({ state, setState }: { state: LoadingOverlayState
     
     return showOverlay ? (
         <div className="loading-overlay">
-            <div className="loading-box">
+            <div className="loading-box" style={state?.style !== undefined ? state.style : {}}>
                 <div className={"spinner " + (state.showSuccess === undefined ? "is-loading" : (state.showSuccess ? "is-success" : "is-error"))}
                     style={{
                         "--spinner-color": state.color ?? "#e60028",

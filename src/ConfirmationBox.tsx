@@ -17,6 +17,7 @@ export interface ConfirmationBoxState {
     activateConfirm?: boolean;
     proceedButtonStyle?: CSSProperties;
     cancelButtonStyle?: CSSProperties;
+    style?: CSSProperties;
 }
 
 // Der standard ComfirmationBox Status, der zur Initialisierung genutzt werden kann
@@ -34,6 +35,7 @@ export const defaultConfirmationState: ConfirmationBoxState = {
     activateConfirm: undefined,
     proceedButtonStyle: undefined,
     cancelButtonStyle: undefined,
+    style: undefined,
 };
 
 // Wobei alle Attribute grundsätzlich optional sind:
@@ -50,6 +52,7 @@ export const defaultConfirmationState: ConfirmationBoxState = {
 // - activateConfirm: ist ein Boolean, der angibt ob die ConfirmationBox angezeigt werden soll oder nicht (wenn false, wird direkt handlerOk aufgerufen) (Standardmäßig true wenn nicht anders angegeben)
 // - proceedButtonStyle: ist der Style des Bestätigungsbuttons (Standardmäßig unverändert)
 // - cancelButtonStyle: ist der Style des Abbrechenbuttons (Standardmäßig unverändert)
+// - style: ist der Style der Confirmation-Box (Standardmäßig unverändert)
 
 export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxState, setState: (state: ConfirmationBoxState) => void }): React.ReactElement {
 
@@ -66,7 +69,6 @@ export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxSta
         if (state?.handlerOk) {
             if (state.activateConfirm ?? true) {
                 setShowConfirm(true);
-                setTimeout(() => { document.getElementById("confirmButton")?.focus(); }, 1);
             }
             else {
                 // Wenn activateConfirm explizit false ist, dann wird die übergebene Funktion direkt ausgeführt ohne ConfirmationBox
@@ -94,7 +96,7 @@ export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxSta
         <div className="confirmation-overlay"
             tabIndex={0}
             ref={overlayRef}>
-            <div className="confirmation-box">
+            <div className="confirmation-box" style={state?.style !== undefined ? state.style : {}}>
                 {state.addCloseButton?
                     <span className="closeButton">
                         <svg xmlns="http://www.w3.org/2000/svg"

@@ -16,6 +16,7 @@ export interface InfoOverlayWithInputState {
     addCloseButton?: boolean;
     proceedButtonStyle?: CSSProperties;
     cancelButtonStyle?: CSSProperties;
+    style?: CSSProperties;
 }
 
 // Um das InfoOverlayWithInput zu nutzen, muss der State die folgende Struktur haben:
@@ -32,6 +33,7 @@ export const defaultInfoOverlayWithInputState : InfoOverlayWithInputState = {
     addCloseButton: false,
     proceedButtonStyle: undefined,
     cancelButtonStyle: undefined,
+    style: undefined,
 };
 // Wobei alle Attribute grundsätzlich optional sind:
 // - headline: ist die Überschrift und wird fett hinterlegt
@@ -46,6 +48,7 @@ export const defaultInfoOverlayWithInputState : InfoOverlayWithInputState = {
 // - addCloseButton: boolscher Wert, der angibt, ob ein x oben rechts als close-Button verfügbar sein soll (bricht die Aktion ohne handler ab, standardmäßig false)
 // - proceedButtonStyle: ist der Style des Bestätigungsbuttons (Standardmäßig unverändert)
 // - cancelButtonStyle: ist der Style des Abbrechenbuttons (Standardmäßig unverändert)
+// - style: ist der Style des LoadingOverlaysWithInput (Standardmäßig unverändert)
 
 // Output: Der Input vom User wird am Ende an den handlerOk übergeben (oder bei handlerCancel ignoriert)!
 // Somit wird der handler so aufgerufen: handlerOk(UserInput, handlerArgs) oder handlerCancel(handlerArgs)
@@ -97,7 +100,7 @@ export function InfoOverlayWithInput({ state, setState }: { state: InfoOverlayWi
 
     return showOverlay ?
         <div className="information-overlay-with-input">
-            <div className="information-box-with-input">
+            <div className="information-box-with-input" style={state?.style !== undefined ? state.style : {}}>
                 {state.addCloseButton?
                     <span className="closeButton">
                         <svg xmlns="http://www.w3.org/2000/svg"
