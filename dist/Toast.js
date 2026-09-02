@@ -1,17 +1,15 @@
-import { useEffect, useState, ReactElement } from 'react';
-import './Toast.css'
-
+import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
+import { useEffect, useState } from 'react';
+import './Toast.css';
 // Zeigt einen kleinen Toast in der oberen rechten Ecke an, der nach 2,5 Sekunden wieder verschwindet
-export function Toast({ state, setState }: { state: string, setState: (value: string) => void }) : ReactElement {
+export function Toast({ state, setState }) {
     // Wird verwendet um die Toast-Notification ein-/auszublenden
     const [showToast, setShowToast] = useState(false);
     // Wird verwendet um den Inhalt der Toast-Notification zu bestimmen
     const [toastContent, setToastContent] = useState("");
-
     useEffect(() => {
-        setToastContent(state)
+        setToastContent(state);
     }, [state]);
-
     useEffect(() => {
         if (toastContent && toastContent !== "") {
             setShowToast(true);
@@ -21,11 +19,5 @@ export function Toast({ state, setState }: { state: string, setState: (value: st
             setShowToast(false);
         }
     }, [toastContent, setState]);
-
-    return <>
-        {showToast && (
-            <div className="toast-notification" role="status" aria-live="polite" aria-atomic="true">
-                {toastContent}
-            </div>)}
-    </>
+    return _jsx(_Fragment, { children: showToast && (_jsx("div", { className: "toast-notification", role: "status", "aria-live": "polite", "aria-atomic": "true", children: toastContent })) });
 }

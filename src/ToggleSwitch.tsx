@@ -15,8 +15,8 @@ export interface ToggleSwitchOption<T> {
 
 export function ToggleSwitch<T>({ optionLeft, optionRight, value, onChange } : { optionLeft: ToggleSwitchOption<T>, optionRight: ToggleSwitchOption<T>, value: T, onChange: (value: T) => void }) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const optionLeftRef = useRef<HTMLDivElement | null>(null);
-    const optionRightRef = useRef<HTMLDivElement | null>(null);
+    const optionLeftRef = useRef<HTMLButtonElement | null>(null);
+    const optionRightRef = useRef<HTMLButtonElement | null>(null);
     const [sliderStyle, setSliderStyle] = useState({});
 
     useEffect(() => {
@@ -34,23 +34,27 @@ export function ToggleSwitch<T>({ optionLeft, optionRight, value, onChange } : {
     }, [value, optionLeft, optionRight]);
 
     return (
-        <div className="toggleWrapper" ref={containerRef}>
-            <div
+        <div className="toggleWrapper" ref={containerRef} role="group" aria-label="Auswahl">
+            <button
+                type="button"
                 className={`toggleOption ${value === optionLeft.value ? "active" : ""}`}
                 ref={el => {optionLeftRef.current = el}}
                 onClick={() => onChange(optionLeft.value)}
+                aria-pressed={value === optionLeft.value}
             >
                 {optionLeft.label}
-            </div>
-            <div
+            </button>
+            <button
+                type="button"
                 className={`toggleOption ${value === optionRight.value ? "active" : ""}`}
                 ref={el => {optionRightRef.current = el}}
                 onClick={() => onChange(optionRight.value)}
+                aria-pressed={value === optionRight.value}
             >
                 {optionRight.label}
-            </div>
+            </button>
 
-            <div className={`toggleSlider ${value === optionLeft.value ? "left" : "right"}`} style={sliderStyle}/>
+            <div className={`toggleSlider ${value === optionLeft.value ? "left" : "right"}`} style={sliderStyle} aria-hidden="true"/>
         </div>
     );
 }

@@ -59,9 +59,7 @@ export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxSta
     // Wird verwendet um die Confirmation Boxen ein- und auszublenden
     const [showConfirm, setShowConfirm] = useState(false);
 
-    // Damit der Fokus auf die Confirmation Box gesetzt wird, wenn sie geöffnet wird
-    // Und man sie mit Enter bestätigen kann
-    const overlayRef = useRef<HTMLDivElement>(null);
+    const confirmButtonRef = useRef<HTMLButtonElement>(null);
 
     // Sobald der State von außen aktualisiert wird triggert diese Funktion
     // Die setzt showConfirm auf true (oder ruft die übergebene Funktion auf wenn confirmationBoxen disabled sind)
@@ -69,6 +67,7 @@ export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxSta
         if (state?.handlerOk) {
             if (state.activateConfirm ?? true) {
                 setShowConfirm(true);
+                setTimeout(() => { confirmButtonRef.current?.focus(); }, 0);
             }
             else {
                 // Wenn activateConfirm explizit false ist, dann wird die übergebene Funktion direkt ausgeführt ohne ConfirmationBox
@@ -76,9 +75,6 @@ export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxSta
                     state.handlerOk(state.handlerArgs);
             }
         }
-        setTimeout(() => {
-            overlayRef.current?.focus();
-        }, 0);
     }, [state]);
 
     const handleAction = (handler: ((args?: unknown) => void) | undefined) : void => {
@@ -93,53 +89,39 @@ export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxSta
     }
 
     return showConfirm ?
-        <div className="confirmation-overlay"
-            tabIndex={0}
-            ref={overlayRef}>
-            <div className="confirmation-box" style={state?.style !== undefined ? state.style : {}}>
+        <div className="confirmation-overlay">
+            <div className="confirmation-box" style={state?.style !== undefined ? state.style : {}}
+                role="alertdialog"
+                aria-modal="true"
+                aria-labelledby={state?.headline !== undefined ? "confirmation-headline" : undefined}
+                aria-label={state?.headline !== undefined ? undefined : "Bestätigung"}
+                aria-describedby="confirmation-message"
+                onKeyDown={(event) => {
+                    if (event.key === "Escape") handleAction(state.handlerCancel);
+                }}>
                 {state.addCloseButton?
                     <span className="closeButton">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            tabIndex={0}
-                            className="close-icon"
-                            onClick={() => handleAction(undefined)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault(); // Verhindert Scroll bei Space
-                                    handleAction(undefined);
-                                }
-                            }}
-                            role="button" aria-label="Dialog schließen"
-                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
+                        <button type="button" className="close-icon" onClick={() => handleAction(undefined)} aria-label="Dialog schließen">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
                     </span> : 
                 <></>}
-                {state?.headline !== undefined ? <div className="headline" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}><strong>{state?.headline}</strong></div> : <></>}
-                <div style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}>{state.message1 ?? state.message ?? ""}</div>
+                {state?.headline !== undefined ? <div className="headline" id="confirmation-headline" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}><strong>{state?.headline}</strong></div> : <></>}
+                <div id="confirmation-message" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}>{state.message1 ?? state.message ?? ""}</div>
                 <div style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}><strong>{state.message2 ?? ""}</strong></div>
                 <div className="confirmation-buttons">
                     <button
                         onClick={() => handleAction(state.handlerCancel)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault(); // Verhindert Scroll bei Space
-                                handleAction(state.handlerCancel);
-                            }
-                        }}
+                        type="button"
                         className="px-4 py-2 bg-gray-300 rounded"
                         style={state?.cancelButtonStyle !== undefined ? state.cancelButtonStyle : {}}>
                         {state.cancelButtonText ? state.cancelButtonText : "Abbrechen"}
                     </button>
                     <button onClick={() => handleAction(state.handlerOk)}
-                        id="confirmButton"
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault(); // Verhindert Scroll bei Space
-                                handleAction(state.handlerOk);
-                            }
-                        }}
+                        ref={confirmButtonRef}
+                        type="button"
                         className="px-4 py-2 bg-blue-600 text-white rounded"
                         style={state?.proceedButtonStyle !== undefined ? state.proceedButtonStyle : {}}>
                         {state.proceedButtonText ? state.proceedButtonText : "OK"}

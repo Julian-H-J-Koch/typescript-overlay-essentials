@@ -88,6 +88,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
             <Select<DropdownOption<T>, true>
                 className = "custom-select" 
                 isMulti={true}
+                aria-label={placeHolder ?? "Auswahl"}
                 placeholder = {placeHolder ?? ""}
                 options = {options}
                 value={options.length > 0 && hasId(options[0].value) ? // Wenn die values der Optionen ids haben, handelt es sich um komplexe Objekte, die zur Auswahl stehen und müssen dahingehend verglichen werden
@@ -150,6 +151,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
         <Select<DropdownOption<T>, false>
                 className = "custom-select" 
                 isMulti={false}
+                aria-label={placeHolder ?? "Auswahl"}
                 placeholder = {placeHolder ?? ""}
                 options = {options}
                 value={options.length > 0 && hasId(options[0].value) ? // Wenn die values der Optionen ids haben, handelt es sich um komplexe Objekte, die zur Auswahl stehen und müssen dahingehend verglichen werden

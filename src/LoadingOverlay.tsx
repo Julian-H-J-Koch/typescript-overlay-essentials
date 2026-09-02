@@ -44,7 +44,7 @@ export function LoadingOverlay({ state, setState }: { state: LoadingOverlayState
     }, [state, setState]);
     
     return showOverlay ? (
-        <div className="loading-overlay">
+        <div className="loading-overlay" role="status" aria-live="polite" aria-atomic="true" aria-busy={state?.isActive ?? false}>
             <div className="loading-box" style={state?.style !== undefined ? state.style : {}}>
                 <div className={"spinner " + (state.showSuccess === undefined ? "is-loading" : (state.showSuccess ? "is-success" : "is-error"))}
                     style={{
@@ -52,7 +52,7 @@ export function LoadingOverlay({ state, setState }: { state: LoadingOverlayState
                         "--success-bg": state.color ?? "#42ab34",
                         "--error-bg": state.color ?? "#e60028",
                     } as React.CSSProperties }
-                />
+                    aria-hidden="true" />
                 {state.message && <div className="loading-message">{state.message}</div>}
             </div>
         </div>

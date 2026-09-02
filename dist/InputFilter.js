@@ -1,20 +1,20 @@
 // Restricts input for the given textbox to the given inputFilter function.
-export function setInputFilter(inputFilter: (value: string) => boolean, errMsg: string, textbox?: HTMLElement) : void {
-    [ "input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout" ].forEach(function(event) {
-        if(textbox) {
-            textbox.addEventListener(event, function(e: Event) {
-                const target = e.currentTarget as HTMLInputElement;
+export function setInputFilter(inputFilter, errMsg, textbox) {
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function (event) {
+        if (textbox) {
+            textbox.addEventListener(event, function (e) {
+                var _a, _b, _c, _d;
+                const target = e.currentTarget;
                 if (inputFilter(target.value)) {
                     // Accepted value.
-                    if ([ "keydown", "mousedown", "focusout" ].indexOf(e.type) >= 0){
-                    target.classList.remove("input-error");
-                    target.setCustomValidity("");
-                    target.removeAttribute("aria-invalid");
+                    if (["keydown", "mousedown", "focusout"].indexOf(e.type) >= 0) {
+                        target.classList.remove("input-error");
+                        target.setCustomValidity("");
+                        target.removeAttribute("aria-invalid");
                     }
-
                     target.dataset.oldValue = target.value;
-                    target.dataset.oldSelectionStart = target.selectionStart?.toString() ?? "";
-                    target.dataset.oldSelectionEnd = target.selectionEnd?.toString() ?? "";
+                    target.dataset.oldSelectionStart = (_b = (_a = target.selectionStart) === null || _a === void 0 ? void 0 : _a.toString()) !== null && _b !== void 0 ? _b : "";
+                    target.dataset.oldSelectionEnd = (_d = (_c = target.selectionEnd) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : "";
                 }
                 else if (target.dataset.oldValue !== undefined) {
                     // Rejected value: restore the previous one.

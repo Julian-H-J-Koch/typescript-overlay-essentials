@@ -43,7 +43,6 @@ export function InfoOverlay({ state, setState }: { state: InfoOverlayState, setS
     useEffect(() => {
         if (state?.message !== undefined || state?.headline !== undefined) {
             setShowOverlay(true);
-            setTimeout(() => { document.getElementById("infoButton")?.focus(); }, 5);
         }
     }, [state]);
 
@@ -59,9 +58,12 @@ export function InfoOverlay({ state, setState }: { state: InfoOverlayState, setS
     }
 
     return showOverlay ?
-        <div className="information-overlay"
-            tabIndex={0}>
-            <div className="information-box" style={state?.style !== undefined ? state.style : {}}>
+        <div className="information-overlay">
+            <div className="information-box" style={state?.style !== undefined ? state.style : {}} role="dialog" aria-modal="true"
+                aria-labelledby={state?.headline !== undefined ? "information-headline" : undefined}
+                aria-label={state?.headline !== undefined ? undefined : "Information"}
+                aria-describedby="information-message"
+                onKeyDown={(event) => { if (event.key === "Escape") handleAction(); }}>
                 {state.addCloseButton?
                     <span className="closeButton">
                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -81,10 +83,10 @@ export function InfoOverlay({ state, setState }: { state: InfoOverlayState, setS
                         </svg>
                     </span> : 
                 <></>}
-                <div className="headline" tabIndex={0} style={{ whiteSpace: "pre-line" }}><strong>{state?.headline !== undefined ? state.headline : ""}</strong></div>
-                <div tabIndex={0} style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}>{state?.message !== undefined ? state.message : ""}</div>
+                <div className="headline" id="information-headline" style={{ whiteSpace: "pre-line" }}><strong>{state?.headline !== undefined ? state.headline : ""}</strong></div>
+                <div id="information-message" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}>{state?.message !== undefined ? state.message : ""}</div>
                 <div className="information-buttons">
-                    <button onClick={() => handleAction()}
+                    <button type="button" autoFocus onClick={() => handleAction()}
                         onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
                                     e.preventDefault(); // Verhindert Scroll bei Space
