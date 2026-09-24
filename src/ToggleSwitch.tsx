@@ -28,8 +28,8 @@ export function ToggleSwitch<T>({ optionLeft, optionRight, value, onChange } : {
         const { offsetLeft, offsetWidth } = el;
 
         setSliderStyle({
-            transform: `translateX(calc(${offsetLeft}px - 1rem))`,
-            width: `calc(${offsetWidth}px + 2rem)`
+            transform: `translateX(calc(${offsetLeft}px))`,
+            width: `calc(${offsetWidth}px)`
         });
     }, [value, optionLeft, optionRight]);
 
