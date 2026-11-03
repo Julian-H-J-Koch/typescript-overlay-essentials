@@ -8,3 +8,4 @@ export { MultipleChoiceOverlay, MultipleChoiceOverlayState, defaultMultipleChoic
 export { MultipleRadioOverlay, MultipleRadioOverlayState, defaultMultipleRadioState } from './MultipleRadioOverlay.js';
 export { Toast } from './Toast.js';
 export { ToggleSwitch, ToggleSwitchOption } from './ToggleSwitch.js'
+export { TutorialOverlay, TutorialState, Steps } from './TutorialOverlay.js';
