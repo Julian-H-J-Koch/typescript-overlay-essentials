@@ -202,7 +202,7 @@ export function TutorialOverlay({ state, setState }: { state: TutorialState, set
                     }}
                 role="dialog"
                 aria-modal="true"
-                aria-labelledby={state?.steps[tutorialStep].headline != null ? "tutorial-headline" : undefined}
+                aria-labelledby={state?.steps[tutorialStep]?.headline != null ? "tutorial-headline" : undefined}
                 aria-label={state?.steps[tutorialStep]?.headline != null ? undefined : "Tutorial"}
                 aria-describedby="tutorial-message"
                 onKeyDown={(event) => {
