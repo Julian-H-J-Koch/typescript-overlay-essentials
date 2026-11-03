@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState, useRef, CSSProperties } from 'react';
+import { useEffect, useState, useRef, CSSProperties, Dispatch, SetStateAction } from 'react';
 import './ConfirmationBox.css';
 
 // Um die ConfirmationBox zu nutzen, muss der State die folgende Struktur haben:
@@ -54,7 +54,7 @@ export const defaultConfirmationState: ConfirmationBoxState = {
 // - cancelButtonStyle: ist der Style des Abbrechenbuttons (Standardmäßig unverändert)
 // - style: ist der Style der Confirmation-Box (Standardmäßig unverändert)
 
-export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxState, setState: (state: ConfirmationBoxState) => void }): React.ReactElement {
+export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxState, setState: Dispatch<SetStateAction<ConfirmationBoxState>> }): React.ReactElement {
 
     // Wird verwendet um die Confirmation Boxen ein- und auszublenden
     const [showConfirm, setShowConfirm] = useState(false);
@@ -89,8 +89,8 @@ export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxSta
     }
 
     return showConfirm ?
-        <div className="confirmation-overlay">
-            <div className="confirmation-box" style={state?.style !== undefined ? state.style : {}}
+        <div className="overlay-essentials-confirmation-overlay">
+            <div className="overlay-essentials-confirmation-box" style={state?.style !== undefined ? state.style : {}}
                 role="alertdialog"
                 aria-modal="true"
                 aria-labelledby={state?.headline !== undefined ? "confirmation-headline" : undefined}
@@ -100,29 +100,29 @@ export function ConfirmationBox({ state, setState }: { state: ConfirmationBoxSta
                     if (event.key === "Escape") handleAction(state.handlerCancel);
                 }}>
                 {state.addCloseButton?
-                    <span className="closeButton">
-                        <button type="button" className="close-icon" onClick={() => handleAction(undefined)} aria-label="Dialog schließen">
+                    <span className="overlay-essentials-closeButton">
+                        <button type="button" className="overlay-essentials-close-icon" onClick={() => handleAction(undefined)} aria-label="Dialog schließen">
                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                             </svg>
                         </button>
                     </span> : 
                 <></>}
-                {state?.headline !== undefined ? <div className="headline" id="confirmation-headline" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}><strong>{state?.headline}</strong></div> : <></>}
-                <div id="confirmation-message" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}>{state.message1 ?? state.message ?? ""}</div>
-                <div style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}><strong>{state.message2 ?? ""}</strong></div>
-                <div className="confirmation-buttons">
+                {state?.headline !== undefined ? <div className="overlay-essentials-headline" id="overlay-essentials-confirmation-headline"><strong>{state?.headline}</strong></div> : <></>}
+                <div id="overlay-essentials-confirmation-message">{state.message1 ?? state.message ?? ""}</div>
+                <div><strong>{state.message2 ?? ""}</strong></div>
+                <div className="overlay-essentials-confirmation-buttons">
                     <button
                         onClick={() => handleAction(state.handlerCancel)}
                         type="button"
-                        className="px-4 py-2 bg-gray-300 rounded"
+                        className="overlay-essentials-px-4 py-2 bg-gray-300 rounded"
                         style={state?.cancelButtonStyle !== undefined ? state.cancelButtonStyle : {}}>
                         {state.cancelButtonText ? state.cancelButtonText : "Abbrechen"}
                     </button>
                     <button onClick={() => handleAction(state.handlerOk)}
                         ref={confirmButtonRef}
                         type="button"
-                        className="px-4 py-2 bg-blue-600 text-white rounded"
+                        className="overlay-essentials-px-4 py-2 bg-blue-600 text-white rounded"
                         style={state?.proceedButtonStyle !== undefined ? state.proceedButtonStyle : {}}>
                         {state.proceedButtonText ? state.proceedButtonText : "OK"}
                     </button>

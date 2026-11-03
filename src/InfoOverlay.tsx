@@ -1,4 +1,4 @@
-import { useEffect, useState, CSSProperties } from 'react';
+import { useEffect, useState, CSSProperties, Dispatch, SetStateAction } from 'react';
 import * as React from 'react';
 import './InfoOverlay.css';
 
@@ -33,7 +33,7 @@ export const defaultInfoOverlayState: InfoOverlayState = {
 // - addCloseButton: boolscher Wert, der angibt, ob ein x oben rechts als close-Button verfügbar sein soll (bricht die Aktion ohne handler ab, standardmäßig false)
 // - style: ist der Style der Information-Box (Standardmäßig unverändert)
 
-export function InfoOverlay({ state, setState }: { state: InfoOverlayState, setState: (state: InfoOverlayState) => void }): React.ReactElement {
+export function InfoOverlay({ state, setState }: { state: InfoOverlayState, setState: Dispatch<SetStateAction<InfoOverlayState>> }): React.ReactElement {
 
     // Wird verwendet um das Infoverlay ein- und auszublenden
     const [showOverlay, setShowOverlay] = useState(false);
@@ -58,17 +58,17 @@ export function InfoOverlay({ state, setState }: { state: InfoOverlayState, setS
     }
 
     return showOverlay ?
-        <div className="information-overlay">
-            <div className="information-box" style={state?.style !== undefined ? state.style : {}} role="dialog" aria-modal="true"
+        <div className="overlay-essentials-information-overlay">
+            <div className="overlay-essentials-information-box" style={state?.style !== undefined ? state.style : {}} role="dialog" aria-modal="true"
                 aria-labelledby={state?.headline !== undefined ? "information-headline" : undefined}
                 aria-label={state?.headline !== undefined ? undefined : "Information"}
                 aria-describedby="information-message"
                 onKeyDown={(event) => { if (event.key === "Escape") handleAction(); }}>
                 {state.addCloseButton?
-                    <span className="closeButton">
+                    <span className="overlay-essentials-closeButton">
                         <svg xmlns="http://www.w3.org/2000/svg"
                             tabIndex={0}
-                            className="close-icon"
+                            className="overlay-essentials-close-icon"
                             onClick={() => setShowOverlay(false)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
@@ -83,9 +83,9 @@ export function InfoOverlay({ state, setState }: { state: InfoOverlayState, setS
                         </svg>
                     </span> : 
                 <></>}
-                <div className="headline" id="information-headline" style={{ whiteSpace: "pre-line" }}><strong>{state?.headline !== undefined ? state.headline : ""}</strong></div>
-                <div id="information-message" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}>{state?.message !== undefined ? state.message : ""}</div>
-                <div className="information-buttons">
+                <div className="overlay-essentials-headline" id="overlay-essentials-information-headline"><strong>{state?.headline !== undefined ? state.headline : ""}</strong></div>
+                <div id="overlay-essentials-information-message">{state?.message !== undefined ? state.message : ""}</div>
+                <div className="overlay-essentials-information-buttons">
                     <button type="button" autoFocus onClick={() => handleAction()}
                         onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
@@ -93,8 +93,8 @@ export function InfoOverlay({ state, setState }: { state: InfoOverlayState, setS
                                     handleAction();
                                 }
                             }}
-                        className="px-4 py-2 bg-blue-600 text-white rounded"
-                        id="infoButton">
+                        className="overlay-essentials-px-4 py-2 bg-blue-600 text-white rounded"
+                        id="overlay-essentials-infoButton">
                         {state?.proceedButtonText !== undefined ? state.proceedButtonText : "OK"}
                     </button>
                 </div>

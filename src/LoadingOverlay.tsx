@@ -1,4 +1,4 @@
-import { useEffect, useState, ReactElement, CSSProperties } from 'react';
+import { useEffect, useState, ReactElement, CSSProperties, Dispatch, SetStateAction } from 'react';
 import * as React from 'react';
 import './LoadingOverlay.css';
 
@@ -27,7 +27,7 @@ export const defaultLoadingOverlayState: LoadingOverlayState = {
 // - showSuccess: zeigt bei "true" ein grünes Häkchen an und bei "false" ein rot hinterlegtes X. Bei "undefined" wird die normale Ladeanimation gezeigt.
 // - style: ist der Style des LoadingOverlays (Standardmäßig unverändert)
 
-export function LoadingOverlay({ state, setState }: { state: LoadingOverlayState, setState: (state: LoadingOverlayState) => void }): ReactElement {
+export function LoadingOverlay({ state, setState }: { state: LoadingOverlayState, setState: Dispatch<SetStateAction<LoadingOverlayState>> }): ReactElement {
     // Wird verwendet um das LoadingOverlay ein- und auszublenden
     const [showOverlay, setShowOverlay] = useState(false);
 
@@ -44,9 +44,9 @@ export function LoadingOverlay({ state, setState }: { state: LoadingOverlayState
     }, [state, setState]);
     
     return showOverlay ? (
-        <div className="loading-overlay" role="status" aria-live="polite" aria-atomic="true" aria-busy={state?.isActive ?? false}>
-            <div className="loading-box" style={state?.style !== undefined ? state.style : {}}>
-                <div className={"spinner " + (state.showSuccess === undefined ? "is-loading" : (state.showSuccess ? "is-success" : "is-error"))}
+        <div className="overlay-essentials-loading-overlay" role="status" aria-live="polite" aria-atomic="true" aria-busy={state?.isActive ?? false}>
+            <div className="overlay-essentials-loading-box" style={state?.style !== undefined ? state.style : {}}>
+                <div className={"overlay-essentials-spinner " + (state.showSuccess === undefined ? "overlay-essentials-is-loading" : (state.showSuccess ? "overlay-essentials-is-success" : "overlay-essentials-is-error"))}
                     style={{
                         "--spinner-color": state.color ?? "#e60028",
                         "--success-bg": state.color ?? "#42ab34",

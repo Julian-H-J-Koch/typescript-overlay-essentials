@@ -8,7 +8,7 @@ import './Dropdown.css';
 // Um das Dropdown Menü zu nutzen, müssen die Optionen das folgende Interface nutzen:
 export interface DropdownOption<T = string> {
   value: T;
-  label: string;
+  label: React.ReactNode;
   disabled?: boolean;
   indent?: number;
 }
@@ -60,19 +60,23 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
         } 
 
         function usePrefersDarkMode() : boolean {
-            const [isDarkMode, setIsDarkMode] = useState(
-                window.matchMedia('(prefers-color-scheme: dark)').matches
-            );
+            const [isDarkMode, setIsDarkMode] = useState(document.documentElement.getAttribute('visual-theme') === "dark");
 
             useEffect(() => {
-                const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-                const handler = (event: MediaQueryListEvent) : void => setIsDarkMode(event.matches);
-                
-                // EventListener hinzufügen
-                mediaQuery.addEventListener('change', handler);
+                // Handler, der ausgeführt wird, wenn sich das Attribut ändert
+                const checkTheme = () => {
+                    const isDark = document.documentElement.getAttribute('visual-theme') === 'dark';
+                    setIsDarkMode(isDark);
+                };
 
-                // Aufräumen
-                return () => mediaQuery.removeEventListener('change', handler);
+                // Oberserver an den Handler koppeln (hört auf Änderungen an dem Attribut, falls sich das visual-theme ändert)
+                const observer = new MutationObserver(checkTheme);
+                observer.observe(document.documentElement, {
+                    attributes: true,
+                    attributeFilter: ['visual-theme'] // Nur auf das Attribut reagieren
+                });
+
+                return () => observer.disconnect();
             }, []);
 
             return isDarkMode;
@@ -86,7 +90,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
 
         return isMulti || Array.isArray(defaultValue) ? (
             <Select<DropdownOption<T>, true>
-                className = "custom-select" 
+                className="overlay-essentials-custom-select" 
                 isMulti={true}
                 aria-label={placeHolder ?? "Auswahl"}
                 placeholder = {placeHolder ?? ""}
@@ -101,7 +105,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
                 menuPosition="fixed"
                 classNamePrefix="dropdown"
                 defaultValue={options.filter(opt => (defaultValue as DropdownOption<T>[]).map(({value}) => (value)).includes(opt.value))}
-                formatOptionLabel={({ label, indent }: { label: string; indent?: number },{ context } : { context: string }) => {
+                formatOptionLabel={({ label, indent }: { label: React.ReactNode; indent?: number },{ context } : { context: string }) => {
                     if (context === 'menu') {
                         // Alle mit indent angegebenen Werte im Dropdown-Menü einrücken
                         return  indent && indent > 0 ? '-'.repeat(indent) + '\u00A0' + label : label;
@@ -164,7 +168,7 @@ export function Dropdown<T = string>({ selections, value, onChange, maxMenuHeigh
                 menuPosition="fixed"
                 classNamePrefix="dropdown"
                 defaultValue={defaultValue}
-                formatOptionLabel={({ label, indent }: { label: string; indent?: number },{ context } : { context: string }) => {
+                formatOptionLabel={({ label, indent }: { label: React.ReactNode; indent?: number },{ context } : { context: string }) => {
                     if (context === 'menu') {
                         // Alle mit indent angegebenen Werte im Dropdown-Menü einrücken
                         return  indent && indent > 0 ? '-'.repeat(indent) + '\u00A0' + label : label;

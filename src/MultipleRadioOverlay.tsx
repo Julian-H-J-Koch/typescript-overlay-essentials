@@ -1,4 +1,4 @@
-import { useEffect, useState, CSSProperties } from 'react';
+import { useEffect, useState, CSSProperties, Dispatch, SetStateAction } from 'react';
 import * as React from 'react';
 import './MultipleRadioOverlay.css';
 
@@ -56,7 +56,7 @@ export const defaultMultipleRadioState: MultipleRadioOverlayState = {
 
 // Output: Der Input vom User wird am Ende an den handlerOk übergeben (oder bei handlerCancel ignoriert)!
 // Somit wird der handler so aufgerufen: handlerOk(UserInput, handlerArgs) oder handlerCancel(handlerArgs)
-export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadioOverlayState, setState: (state: MultipleRadioOverlayState) => void }): React.ReactElement {
+export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadioOverlayState, setState: Dispatch<SetStateAction<MultipleRadioOverlayState>>}): React.ReactElement {
 
     // Wird verwendet um das Infoverlay ein- und auszublenden
     const [showOverlay, setShowOverlay] = useState<boolean>(false);
@@ -90,17 +90,17 @@ export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadio
     }
 
     return showOverlay ?
-        <div className="multipleradio-overlay">
-            <div className="multipleradio-box" style={state?.style !== undefined ? state.style : {}} role="dialog" aria-modal="true"
+        <div className="overlay-essentials-multipleradio-overlay">
+            <div className="overlay-essentials-multipleradio-box" style={state?.style !== undefined ? state.style : {}} role="dialog" aria-modal="true"
                 aria-labelledby={state?.headline != null ? "multiple-radio-headline" : undefined}
                 aria-label={state?.headline != null ? undefined : "Einfachauswahl"}
                 aria-describedby="multiple-radio-message"
                 onKeyDown={(event) => { if (event.key === "Escape") handleAction(state.handlerCancel, false); }}>
                 {state.addCloseButton?
-                    <span className="closeButton">
+                    <span className="overlay-essentials-closeButton">
                         <svg xmlns="http://www.w3.org/2000/svg"
                             tabIndex={0}
-                            className="close-icon"
+                            className="overlay-essentials-close-icon"
                             onClick={() => handleAction(undefined, false)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
@@ -115,12 +115,12 @@ export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadio
                         </svg>
                     </span> : 
                 <></>}
-                <div className="headline" id="multiple-radio-headline" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}><strong>{state?.headline != null ? state.headline : ""}</strong></div>
-                <div id="multiple-radio-message" style={{ whiteSpace: "pre-line", wordBreak: "break-word" }}>{state?.message != null ? state.message : ""}</div>
-                <div className="radios-input" role="radiogroup" aria-label="Auswahloptionen">
-                    <div className="radios-container">
+                <div className="overlay-essentials-headline" id="overlay-essentials-multiple-radio-headline"><strong>{state?.headline != null ? state.headline : ""}</strong></div>
+                <div id="overlay-essentials-multiple-radio-message">{state?.message != null ? state.message : ""}</div>
+                <div className="overlay-essentials-radios-input" role="radiogroup" aria-label="Auswahloptionen">
+                    <div className="overlay-essentials-radios-container">
                         {state?.choices.map((choice, index) => (
-                            <label className="radio-label" key={index}>
+                            <label className="overlay-essentials-radio-label" key={index}>
                                 <input
                                     type="radio"
                                     name="multiple-radio-options"
@@ -140,7 +140,7 @@ export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadio
                         ))}
                     </div>
                 </div>
-                <div className="information-buttons">
+                <div className="overlay-essentials-information-buttons">
                     <button onClick={() => handleAction(state.handlerCancel, false)}
                         onKeyDown={(event) => {
                             if (event.key === "Enter" || event.key === ' ') {
@@ -148,7 +148,7 @@ export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadio
                                 handleAction(state.handlerCancel, false);
                             }
                         }}
-                        className="px-4 py-2 bg-gray-300 rounded"
+                        className="overlay-essentials-px-4 py-2 bg-gray-300 rounded"
                         style={state?.cancelButtonStyle != null ? state.cancelButtonStyle : {}}>
                         {state?.cancelButtonText != null ? state.cancelButtonText : "Abbrechen"}
                     </button>
@@ -161,7 +161,7 @@ export function MultipleRadioOverlay({ state, setState }: { state: MultipleRadio
                                 handleAction(state.handlerOk, true);
                             }
                         }}
-                        className="px-4 py-2 bg-blue-600 text-white rounded"
+                        className="overlay-essentials-px-4 py-2 bg-blue-600 text-white rounded"
                         style={state?.proceedButtonStyle != null ? state.proceedButtonStyle : {}}>
                         {state?.proceedButtonText != null ? state.proceedButtonText : "OK"}
                     </button>

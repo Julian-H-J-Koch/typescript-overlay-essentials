@@ -1,12 +1,12 @@
-import { useEffect, useState, ReactElement } from 'react';
+import { useEffect, useState, ReactElement, Dispatch, SetStateAction } from 'react';
 import './Toast.css'
 
 // Zeigt einen kleinen Toast in der oberen rechten Ecke an, der nach 2,5 Sekunden wieder verschwindet
-export function Toast({ state, setState }: { state: string, setState: (value: string) => void }) : ReactElement {
+export function Toast({ state, setState }: { state: string | React.ReactElement, setState: Dispatch<SetStateAction<string | React.ReactElement>> }) : ReactElement {
     // Wird verwendet um die Toast-Notification ein-/auszublenden
     const [showToast, setShowToast] = useState(false);
     // Wird verwendet um den Inhalt der Toast-Notification zu bestimmen
-    const [toastContent, setToastContent] = useState("");
+    const [toastContent, setToastContent] = useState<string | React.ReactElement>("");
 
     useEffect(() => {
         setToastContent(state)
@@ -24,7 +24,7 @@ export function Toast({ state, setState }: { state: string, setState: (value: st
 
     return <>
         {showToast && (
-            <div className="toast-notification" role="status" aria-live="polite" aria-atomic="true">
+            <div className="overlay-essentials-toast-notification" role="status" aria-live="polite" aria-atomic="true">
                 {toastContent}
             </div>)}
     </>
