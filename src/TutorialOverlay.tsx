@@ -46,9 +46,16 @@ const defaultTutorialState : TutorialState = {
     style: undefined,
 };
 
+enum Positions {
+    TOP,
+    RIGHT,
+    BOTTOM,
+    LEFT,
+};
+
 interface TutorialPos {
-    showLeft?: boolean,
-    px_left: number,
+    position: Positions,
+    px_left: number | null,
     px_top: number
 }
 
@@ -144,19 +151,20 @@ export function TutorialOverlay({ state, setState }: { state: TutorialState, set
             e.scrollIntoView({behavior: "instant", block: "center"});
         }
 
-        rect = e.getBoundingClientRect();
-
         // 25 rem
-        const tooltipWidth = 31 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const _1rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const tooltipWidth = 32 * _1rem;
 
-        const showLeft = rect.right + tooltipWidth > window.innerWidth;
+        const position = rect.right + tooltipWidth <= window.innerWidth ? Positions.RIGHT
+                        : (rect.left - tooltipWidth >= 0 ? Positions.LEFT
+                        : Positions.BOTTOM);
 
         setTutorialPos({
-            showLeft,
-            px_left: showLeft
-                ? rect.left - tooltipWidth - parseFloat(getComputedStyle(document.documentElement).fontSize)
-                : rect.right + parseFloat(getComputedStyle(document.documentElement).fontSize),
-            px_top: rect.top
+            position,
+            px_left: position === Positions.LEFT ? rect.left - tooltipWidth
+                : (position === Positions.RIGHT ? rect.right + _1rem 
+                : null),
+            px_top: position !== Positions.BOTTOM ? rect.top : (rect.bottom + _1rem)
         });
 
         if(!dontHighlightElement) {
@@ -188,11 +196,11 @@ export function TutorialOverlay({ state, setState }: { state: TutorialState, set
                         height: `${highlightElementRect?.height ?? 0}px`,
                     }}
             />
-            <div className="overlay-essentials-tutorial-box" style={{
+            <div className="overlay-essentials-tutorial-box" id="overlay-essentials-tutorial-box" style={{
                     ...(tutorialPos
                             ? {
                                 position: "fixed",
-                                left: tutorialPos.px_left,
+                                left: tutorialPos.px_left ?? ';',
                                 top: tutorialPos.px_top,
                                 transform: 'none'
                             }
@@ -233,6 +241,9 @@ export function TutorialOverlay({ state, setState }: { state: TutorialState, set
                                         setHighlightElementRect(null);
                                     }
                                     setTutorialStep(prev => prev - 1);
+                                    setTimeout(() => {
+                                        document.getElementById("overlay-essentials-tutorial-box")?.scrollIntoView();
+                                    }, 10);
                                 }, nextCommand != null ? (state?.steps[tutorialStep - 1].waitFor ?? TIMEOUT_OVERLAY_WAIT_FOR_COMMAND_EXECUTION_MS) : 0);
                             }
                             else {
@@ -262,6 +273,9 @@ export function TutorialOverlay({ state, setState }: { state: TutorialState, set
                                         setHighlightElementRect(null);
                                     }
                                     setTutorialStep(prev => prev + 1);
+                                    setTimeout(() => {
+                                        document.getElementById("overlay-essentials-tutorial-box")?.scrollIntoView();
+                                    }, 10);
                                 }, nextCommand != null ? state?.steps[tutorialStep + 1].waitFor ?? TIMEOUT_OVERLAY_WAIT_FOR_COMMAND_EXECUTION_MS : 0);
                             }
                             else {
