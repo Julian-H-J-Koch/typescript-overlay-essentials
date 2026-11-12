@@ -177,6 +177,8 @@ export function TutorialOverlay({ state, setState }: { state: TutorialState, set
         } else {
             e.scrollIntoView({behavior: "instant", block: "center"});
         }
+        
+        rect = e.getBoundingClientRect();
 
         // 25 rem
         const _1rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
